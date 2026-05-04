@@ -1,0 +1,106 @@
+- generic [active] [ref=e1]:
+  - generic:
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - navigation [ref=e26]:
+            - button "previous" [ref=e27] [cursor=pointer]:
+              - img "previous" [ref=e28]
+            - generic [ref=e30]:
+              - generic [ref=e31]: 2/
+              - text: "2"
+            - button "next" [disabled] [ref=e32]:
+              - img "next" [ref=e33]
+          - img
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - img [ref=e37]
+            - generic "Latest available version is detected (16.2.4)." [ref=e39]: Next.js 16.2.4
+            - generic [ref=e40]: Turbopack
+          - img
+      - dialog "Runtime SyntaxError" [ref=e133]:
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - generic [ref=e47]:
+              - generic [ref=e48]:
+                - generic [ref=e49]: Runtime SyntaxError
+                - generic [ref=e134]: Server
+              - generic [ref=e50]:
+                - button "Copy Error Info" [ref=e51] [cursor=pointer]:
+                  - img [ref=e52]
+                - button "No related documentation found" [disabled] [ref=e54]:
+                  - img [ref=e55]
+                - button "Attach Node.js inspector" [ref=e57] [cursor=pointer]:
+                  - img [ref=e58]
+            - generic [ref=e67]: Unexpected token '<', "<script> f"... is not valid JSON
+          - generic [ref=e69]:
+            - generic [ref=e135]:
+              - paragraph [ref=e137]:
+                - img [ref=e139]
+                - generic [ref=e143]: node_modules\@notionhq\client\src\Client.ts (477:45) @ Client.executeSingleRequest
+                - button "Open in editor" [ref=e144] [cursor=pointer]:
+                  - img [ref=e146]
+              - generic [ref=e149]:
+                - generic [ref=e150]: "475 | }"
+                - generic [ref=e151]: 476 |
+                - generic [ref=e152]: "> 477 | const responseJson: ResponseBody = JSON.parse(responseText)"
+                - generic [ref=e153]: "| ^"
+                - generic [ref=e154]: "478 | this.log(LogLevel.INFO, \"request success\", {"
+                - generic [ref=e155]: 479 | method,
+                - generic [ref=e156]: 480 | path,
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - paragraph [ref=e159]:
+                  - text: Call Stack
+                  - generic [ref=e160]: "10"
+                - button "Show 5 ignore-listed frame(s)" [ref=e161] [cursor=pointer]:
+                  - text: Show 5 ignore-listed frame(s)
+                  - img [ref=e162]
+              - generic [ref=e164]:
+                - generic [ref=e165]: JSON.parse
+                - text: <anonymous>
+              - generic [ref=e166]:
+                - generic [ref=e167]:
+                  - text: Client.executeSingleRequest
+                  - button "Open Client.executeSingleRequest in editor" [ref=e168] [cursor=pointer]:
+                    - img [ref=e169]
+                - text: node_modules\@notionhq\client\src\Client.ts (477:45)
+              - generic [ref=e171]:
+                - generic [ref=e172]:
+                  - text: Client.executeWithRetry
+                  - button "Open Client.executeWithRetry in editor" [ref=e173] [cursor=pointer]:
+                    - img [ref=e174]
+                - text: node_modules\@notionhq\client\src\Client.ts (419:16)
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - text: getPosts
+                  - button "Open getPosts in editor" [ref=e178] [cursor=pointer]:
+                    - img [ref=e179]
+                - text: lib\notion.ts (38:20)
+              - generic [ref=e181]:
+                - generic [ref=e182]:
+                  - text: HomePage
+                  - button "Open HomePage in editor" [ref=e183] [cursor=pointer]:
+                    - img [ref=e184]
+                - text: app\page.tsx (13:17)
+        - generic [ref=e110]: "1"
+        - generic [ref=e111]: "2"
+    - generic [ref=e6] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e7]:
+        - img [ref=e8]
+      - generic [ref=e123]:
+        - button "Open issues overlay" [ref=e124]:
+          - generic [ref=e125]:
+            - generic [ref=e126]: "1"
+            - generic [ref=e127]: "2"
+          - generic [ref=e128]:
+            - text: Issue
+            - generic [ref=e129]: s
+        - button "Collapse issues badge" [ref=e130]:
+          - img [ref=e131]
+  - generic [ref=e12]:
+    - img [ref=e13]
+    - heading "This page couldn’t load" [level=1] [ref=e15]
+    - paragraph [ref=e16]: A server error occurred. Reload to try again.
+    - button "Reload" [ref=e19] [cursor=pointer]
+  - paragraph [ref=e20]: ERROR 3033433691
