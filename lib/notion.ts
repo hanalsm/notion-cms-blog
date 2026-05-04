@@ -1,8 +1,3 @@
-import { Client } from "@notionhq/client";
-
-const notion = new Client({ auth: process.env.NOTION_API_KEY });
-const DATABASE_ID = process.env.NOTION_DATABASE_ID!;
-
 export type Post = {
   id: string;
   slug: string;
@@ -19,37 +14,43 @@ export type Block = {
   url?: string;
 };
 
-type QueryResponse = {
-  results: any[];
-  next_cursor: string | null;
-  has_more: boolean;
-};
+const TOKEN = process.env.NOTION_API_KEY!;
+const DB_ID = process.env.NOTION_DATABASE_ID!;
+const NOTION_VERSION = "2022-06-28";
 
-// SDK v5에서 databases.query가 제거됨 → request()로 직접 호출
-async function queryDatabase(filter: any, sorts?: any[]): Promise<any[]> {
-  const response = await notion.request<QueryResponse>({
-    path: `databases/${DATABASE_ID}/query`,
-    method: "post",
-    body: { filter, sorts },
+async function notionFetch(path: string, body?: object) {
+  const res = await fetch(`https://api.notion.com/v1/${path}`, {
+    method: body ? "POST" : "GET",
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      "Notion-Version": NOTION_VERSION,
+      "Content-Type": "application/json",
+    },
+    body: body ? JSON.stringify(body) : undefined,
+    cache: "no-store",
   });
-  return response.results;
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Notion API 오류 (${res.status}): ${text.slice(0, 200)}`);
+  }
+
+  return res.json();
 }
 
 export async function getPosts(tag?: string): Promise<Post[]> {
-  const baseFilter = {
-    property: "상태",
-    select: { equals: "발행" },
-  };
+  const baseFilter = { property: "상태", select: { equals: "발행" } };
 
   const filter = tag
     ? { and: [baseFilter, { property: "태그", multi_select: { contains: tag } }] }
     : baseFilter;
 
-  const results = await queryDatabase(filter, [
-    { property: "발행일", direction: "descending" },
-  ]);
+  const data = await notionFetch(`databases/${DB_ID}/query`, {
+    filter,
+    sorts: [{ property: "발행일", direction: "descending" }],
+  });
 
-  return results.map((page: any) => ({
+  return data.results.map((page: any) => ({
     id: page.id,
     slug: page.properties["슬러그"]?.rich_text?.[0]?.plain_text ?? page.id,
     title: page.properties["제목"]?.title?.[0]?.plain_text ?? "제목 없음",
@@ -60,16 +61,18 @@ export async function getPosts(tag?: string): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const results = await queryDatabase({
-    and: [
-      { property: "상태", select: { equals: "발행" } },
-      { property: "슬러그", rich_text: { equals: slug } },
-    ],
+  const data = await notionFetch(`databases/${DB_ID}/query`, {
+    filter: {
+      and: [
+        { property: "상태", select: { equals: "발행" } },
+        { property: "슬러그", rich_text: { equals: slug } },
+      ],
+    },
   });
 
-  if (!results.length) return null;
+  if (!data.results.length) return null;
 
-  const page = results[0];
+  const page = data.results[0];
   return {
     id: page.id,
     slug: page.properties["슬러그"]?.rich_text?.[0]?.plain_text ?? page.id,
@@ -81,9 +84,9 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 }
 
 export async function getPageBlocks(pageId: string): Promise<Block[]> {
-  const response = await notion.blocks.children.list({ block_id: pageId });
+  const data = await notionFetch(`blocks/${pageId}/children`);
 
-  return response.results.map((block: any) => {
+  return data.results.map((block: any) => {
     const { type } = block;
     const richTextTypes = [
       "paragraph", "heading_1", "heading_2", "heading_3",
