@@ -26,7 +26,8 @@
       "PowerShell($headers = @{ \"Authorization\" = \"Bearer ntn_377940950847Ijth0CmgQHslfb87O11wTZBNgtnx5Lbuh\"; \"Notion-Version\" = \"2022-06-28\"; \"Content-Type\" = \"application/json\" }; $body = '{}'; try { $r = Invoke-RestMethod -Uri \"https://api.notion.com/v1/databases/3568ccb41fec80e1b5cdce9d6d590efc/query\" -Method Post -Headers $headers -Body $body; Write-Output \"성공: $\\($r.object\\)\" } catch { Write-Output \"에러: $\\($_.Exception.Message\\)\"; Write-Output $_.ErrorDetails.Message })",
       "PowerShell(curl.exe -s -X POST \"https://api.notion.com/v1/databases/3568ccb41fec80e1b5cdce9d6d590efc/query\" -H \"Authorization: Bearer ntn_377940950847Ijth0CmgQHslfb87O11wTZBNgtnx5Lbuh\" -H \"Notion-Version: 2022-06-28\" -H \"Content-Type: application/json\" -d \"{}\" 2>&1 | Select-Object -First 5)",
       "PowerShell(curl.exe -v \"https://api.notion.com/v1/users/me\" -H \"Authorization: Bearer ntn_377940950847Ijth0CmgQHslfb87O11wTZBNgtnx5Lbuh\" -H \"Notion-Version: 2022-06-28\" 2>&1 | Select-Object -First 20)",
-      "PowerShell(curl.exe -s --ssl-no-revoke -X POST \"https://api.notion.com/v1/databases/3568ccb41fec80e1b5cdce9d6d590efc/query\" -H \"Authorization: Bearer ntn_377940950847Ijth0CmgQHslfb87O11wTZBNgtnx5Lbuh\" -H \"Notion-Version: 2022-06-28\" -H \"Content-Type: application/json\" -d \"{}\" 2>&1)"
+      "PowerShell(curl.exe -s --ssl-no-revoke -X POST \"https://api.notion.com/v1/databases/3568ccb41fec80e1b5cdce9d6d590efc/query\" -H \"Authorization: Bearer ntn_377940950847Ijth0CmgQHslfb87O11wTZBNgtnx5Lbuh\" -H \"Notion-Version: 2022-06-28\" -H \"Content-Type: application/json\" -d \"{}\" 2>&1)",
+      "PowerShell(New-Item *)"
     ]
   },
   "enableAllProjectMcpServers": true,
