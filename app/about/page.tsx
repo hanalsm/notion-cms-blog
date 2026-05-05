@@ -1,4 +1,4 @@
-import { Layers } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -10,19 +10,11 @@ import { Separator } from "@/components/ui/separator";
 
 const stack = [
   { name: "Next.js", version: "16.x", description: "React 풀스택 프레임워크" },
-  {
-    name: "TypeScript",
-    version: "5.x",
-    description: "정적 타입 지원 JavaScript",
-  },
-  {
-    name: "Tailwind CSS",
-    version: "v4",
-    description: "유틸리티 퍼스트 CSS 프레임워크",
-  },
+  { name: "TypeScript", version: "5.x", description: "정적 타입 지원 JavaScript" },
+  { name: "Tailwind CSS", version: "v4", description: "유틸리티 퍼스트 CSS 프레임워크" },
   { name: "shadcn/ui", version: "latest", description: "접근성 기반 UI 컴포넌트" },
   { name: "next-themes", version: "latest", description: "다크모드 지원" },
-  { name: "lucide-react", version: "latest", description: "아이콘 라이브러리" },
+  { name: "Notion API", version: "2022-06-28", description: "콘텐츠 CMS" },
 ];
 
 export default function AboutPage() {
@@ -32,17 +24,14 @@ export default function AboutPage() {
         {/* 헤더 */}
         <div className="mb-10 flex flex-col items-center text-center gap-4">
           <div className="flex size-16 items-center justify-center rounded-2xl bg-primary/10">
-            <Layers className="size-8 text-primary" />
+            <TrendingUp className="size-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Next Starter Kit
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight">매크로 인사이트</h1>
             <p className="mt-2 text-muted-foreground">
-              모던 웹 개발을 위한 최적화된 스타터 킷
+              금리·환율·유가·중앙은행, 매일 업데이트되는 매크로 분석 블로그
             </p>
           </div>
-          <Badge>v1.0.0</Badge>
         </div>
 
         <Separator className="my-8" />
@@ -52,16 +41,16 @@ export default function AboutPage() {
           <h2 className="mb-4 text-xl font-semibold">프로젝트 소개</h2>
           <div className="space-y-3 text-muted-foreground">
             <p>
-              이 스타터 킷은 Next.js 16 App Router를 기반으로 빠르게 프로젝트를
-              시작할 수 있도록 구성되었습니다.
+              매크로 인사이트는 매일 글로벌 금융시장에서 가장 주목할 만한 이슈를 선별해
+              분석 글을 업데이트하는 블로그입니다.
             </p>
             <p>
-              Tailwind CSS v4의 CSS-first 설정 방식과 shadcn/ui 컴포넌트로 일관된
-              디자인 시스템을 제공하며, 다크모드를 기본 지원합니다.
+              Fed 금리 결정, 원·달러 환율 흐름, 국제 유가 동향, 미중 무역 갈등 등
+              거시경제 전반을 다루며, 단순한 뉴스 요약을 넘어 투자 시사점까지 함께 제공합니다.
             </p>
             <p>
-              TypeScript로 작성되어 타입 안전성을 보장하며, 프로덕션 환경에 바로
-              적용 가능한 구조로 설계되었습니다.
+              복잡한 매크로 환경을 빠르고 명확하게 파악할 수 있도록,
+              핵심만 담아 매일 한 편씩 발행합니다.
             </p>
           </div>
         </section>
@@ -69,7 +58,7 @@ export default function AboutPage() {
         <Separator className="my-8" />
 
         {/* 기술 스택 */}
-        <section>
+        <section id="stack">
           <h2 className="mb-4 text-xl font-semibold">기술 스택</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {stack.map(({ name, version, description }) => (
