@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Shrimp Task Manager (local MCP server, not part of project source)
+mcp-shrimp-task-manager/
