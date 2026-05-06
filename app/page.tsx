@@ -21,7 +21,7 @@ export default async function HomePage({
           <h1 className="text-3xl font-bold tracking-tight">매크로 인사이트</h1>
         </div>
         <p className="text-muted-foreground">
-          금리·중앙은행·매크로 분석을 Notion으로 관리하는 인사이트 블로그
+          금리·환율·유가 — 시장을 움직이는 변수를 날카롭게 읽습니다.
         </p>
         <div className="mt-4 h-0.5 w-10 rounded-full bg-primary/40" />
       </section>
