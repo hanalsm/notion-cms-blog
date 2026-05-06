@@ -7,7 +7,7 @@ export const revalidate = 60;
 function formatDate(dateStr: string) {
   if (!dateStr) return "";
   const [year, month, day] = dateStr.split("-");
-  return `${year.slice(2)}/${month}/${day}`;
+  return `${year}/${month}/${day}`;
 }
 
 export default async function HeadlinesPage() {

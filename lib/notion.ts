@@ -32,7 +32,7 @@ const DB_ID = process.env.NOTION_DATABASE_ID!;
 const HEADLINES_DB_ID = process.env.NOTION_HEADLINES_DB_ID!;
 const NOTION_VERSION = "2022-06-28";
 
-async function notionFetch(path: string, body?: object) {
+async function notionFetch(path: string, body?: object, revalidate = 60) {
   const res = await fetch(`https://api.notion.com/v1/${path}`, {
     method: body ? "POST" : "GET",
     headers: {
@@ -41,7 +41,9 @@ async function notionFetch(path: string, body?: object) {
       "Content-Type": "application/json",
     },
     body: body ? JSON.stringify(body) : undefined,
-    cache: "no-store",
+    ...(body
+      ? { cache: "force-cache" as const, next: { revalidate } }
+      : { next: { revalidate } }),
   });
 
   if (!res.ok) {
@@ -62,7 +64,7 @@ export async function getPosts(tag?: string): Promise<Post[]> {
   const data = await notionFetch(`databases/${DB_ID}/query`, {
     filter,
     sorts: [{ property: "발행일", direction: "descending" }],
-  });
+  }, 60);
 
   return data.results.map((page: any) => ({
     id: page.id,
@@ -82,7 +84,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         { property: "슬러그", rich_text: { equals: slug } },
       ],
     },
-  });
+  }, 300);
 
   if (!data.results.length) return null;
 
@@ -101,7 +103,7 @@ export async function getHeadlines(): Promise<HeadlinePage[]> {
   const data = await notionFetch(`databases/${HEADLINES_DB_ID}/query`, {
     filter: { property: "상태", select: { equals: "발행" } },
     sorts: [{ property: "발행일", direction: "descending" }],
-  });
+  }, 60);
 
   return data.results.map((page: any) => ({
     id: page.id,
@@ -112,7 +114,7 @@ export async function getHeadlines(): Promise<HeadlinePage[]> {
 
 export async function getHeadlineById(id: string): Promise<HeadlinePage | null> {
   try {
-    const page = await notionFetch(`pages/${id}`);
+    const page = await notionFetch(`pages/${id}`, undefined, 300);
     return {
       id: page.id,
       title: page.properties["제목"]?.title?.[0]?.plain_text ?? "제목 없음",
@@ -133,7 +135,7 @@ function parseRichText(segments: any[]): { content: string; richText: RichTextSe
 }
 
 export async function getPageBlocks(pageId: string): Promise<Block[]> {
-  const data = await notionFetch(`blocks/${pageId}/children`);
+  const data = await notionFetch(`blocks/${pageId}/children`, undefined, 300);
 
   return data.results.map((block: any) => {
     const { type } = block;

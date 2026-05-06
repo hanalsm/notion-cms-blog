@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getHeadlineById, getPageBlocks } from "@/lib/notion";
-import { NotionRenderer } from "@/components/blog/NotionRenderer";
+import { HeadlineRenderer } from "@/components/blog/HeadlineRenderer";
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
@@ -41,12 +41,12 @@ export default async function HeadlineDetailPage({
         헤드라인 목록으로
       </Link>
 
-      <header className="mb-8">
+      <header className="mb-6">
         <h1 className="text-2xl font-bold">{headline.title}</h1>
       </header>
 
       <article>
-        <NotionRenderer blocks={blocks} />
+        <HeadlineRenderer blocks={blocks} />
       </article>
     </main>
   );
