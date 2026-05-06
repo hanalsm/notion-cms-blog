@@ -18,7 +18,7 @@ function RichContent({ richText, fallback }: { richText?: RichTextSegment[]; fal
   );
 }
 
-// Parses "[번역제목](url) // 영문원문 // 출처 // HH:MM:SS" format
+// Parses "[번역제목](url) // 영문원문 // 출처" format
 function HeadlineBullet({ block }: { block: Block }) {
   const linkSeg = block.richText?.find((s) => s.href);
   const plainSeg = block.richText?.find((s) => !s.href && s.text.includes(" // "));
@@ -34,7 +34,6 @@ function HeadlineBullet({ block }: { block: Block }) {
   const parts = plainSeg.text.split(" // ");
   const englishTitle = parts[1]?.trim() ?? "";
   const source = parts[2]?.trim() ?? "";
-  const time = parts[3]?.trim() ?? "00:00:00";
 
   return (
     <li className="list-none border-b border-border/30 py-3 last:border-0">
@@ -49,7 +48,7 @@ function HeadlineBullet({ block }: { block: Block }) {
       </div>
       {englishTitle && (
         <p className="text-sm text-muted-foreground/50 mt-0.5 leading-snug">
-          {englishTitle}{time !== "00:00:00" ? ` — ${time}` : ""}
+          {englishTitle}
         </p>
       )}
     </li>
