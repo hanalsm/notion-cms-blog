@@ -1,3 +1,9 @@
+export type RichTextSegment = {
+  text: string;
+  href?: string;
+  bold?: boolean;
+};
+
 export type Post = {
   id: string;
   slug: string;
@@ -7,15 +13,23 @@ export type Post = {
   tags: string[];
 };
 
+export type HeadlinePage = {
+  id: string;
+  title: string;
+  publishedAt: string;
+};
+
 export type Block = {
   id: string;
   type: string;
   content: string;
+  richText?: RichTextSegment[];
   url?: string;
 };
 
 const TOKEN = process.env.NOTION_API_KEY!;
 const DB_ID = process.env.NOTION_DATABASE_ID!;
+const HEADLINES_DB_ID = process.env.NOTION_HEADLINES_DB_ID!;
 const NOTION_VERSION = "2022-06-28";
 
 async function notionFetch(path: string, body?: object) {
@@ -83,6 +97,41 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   };
 }
 
+export async function getHeadlines(): Promise<HeadlinePage[]> {
+  const data = await notionFetch(`databases/${HEADLINES_DB_ID}/query`, {
+    filter: { property: "상태", select: { equals: "발행" } },
+    sorts: [{ property: "발행일", direction: "descending" }],
+  });
+
+  return data.results.map((page: any) => ({
+    id: page.id,
+    title: page.properties["제목"]?.title?.[0]?.plain_text ?? "제목 없음",
+    publishedAt: page.properties["발행일"]?.date?.start ?? "",
+  }));
+}
+
+export async function getHeadlineById(id: string): Promise<HeadlinePage | null> {
+  try {
+    const page = await notionFetch(`pages/${id}`);
+    return {
+      id: page.id,
+      title: page.properties["제목"]?.title?.[0]?.plain_text ?? "제목 없음",
+      publishedAt: page.properties["발행일"]?.date?.start ?? "",
+    };
+  } catch {
+    return null;
+  }
+}
+
+function parseRichText(segments: any[]): { content: string; richText: RichTextSegment[] } {
+  const richText: RichTextSegment[] = segments.map((rt: any) => ({
+    text: rt.plain_text ?? "",
+    href: rt.href ?? undefined,
+    bold: rt.annotations?.bold ?? false,
+  }));
+  return { content: richText.map((s) => s.text).join(""), richText };
+}
+
 export async function getPageBlocks(pageId: string): Promise<Block[]> {
   const data = await notionFetch(`blocks/${pageId}/children`);
 
@@ -93,15 +142,20 @@ export async function getPageBlocks(pageId: string): Promise<Block[]> {
       "bulleted_list_item", "numbered_list_item", "quote",
     ];
 
-    const content = richTextTypes.includes(type)
-      ? (block[type]?.rich_text?.map((rt: any) => rt.plain_text).join("") ?? "")
-      : "";
+    let content = "";
+    let richText: RichTextSegment[] | undefined;
+
+    if (richTextTypes.includes(type)) {
+      const parsed = parseRichText(block[type]?.rich_text ?? []);
+      content = parsed.content;
+      richText = parsed.richText;
+    }
 
     const url =
       type === "image"
         ? (block.image?.file?.url ?? block.image?.external?.url)
         : undefined;
 
-    return { id: block.id, type, content, url };
+    return { id: block.id, type, content, richText, url };
   });
 }
