@@ -15,7 +15,7 @@ export default async function HomePage({
   return (
     <div className="container mx-auto max-w-screen-xl px-4 py-12">
       {/* 헤더 섹션 */}
-      <section className="mb-10">
+      <section className="mb-10 rounded-2xl bg-gradient-to-br from-primary/[0.07] to-transparent px-6 py-8">
         <div className="flex items-center gap-2 mb-2">
           <TrendingUp className="size-6 text-primary" />
           <h1 className="text-3xl font-bold tracking-tight">매크로 인사이트</h1>
@@ -23,6 +23,7 @@ export default async function HomePage({
         <p className="text-muted-foreground">
           금리·중앙은행·매크로 분석을 Notion으로 관리하는 인사이트 블로그
         </p>
+        <div className="mt-4 h-0.5 w-10 rounded-full bg-primary/40" />
       </section>
 
       {/* 태그 필터 */}
