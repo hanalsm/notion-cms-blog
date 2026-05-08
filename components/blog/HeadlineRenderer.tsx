@@ -35,11 +35,13 @@ function HeadlineBullet({ block }: { block: Block }) {
   const englishTitle = parts[1]?.trim() ?? "";
   const source = parts[2]?.trim() ?? "";
 
+  const summary = parts[3]?.trim() ?? "";
+
   return (
     <li className="list-none border-b border-border/30 py-3 last:border-0">
       <div className="flex items-baseline gap-2 flex-wrap">
         <a href={linkSeg.href} target="_blank" rel="noopener noreferrer"
-          className="font-medium leading-snug hover:text-primary transition-colors">
+          className="font-medium leading-snug hover:text-primary underline underline-offset-2 decoration-transparent hover:decoration-primary/60 transition-colors">
           {linkSeg.text}
         </a>
         {source && (
@@ -49,6 +51,11 @@ function HeadlineBullet({ block }: { block: Block }) {
       {englishTitle && (
         <p className="text-sm text-muted-foreground/50 mt-0.5 leading-snug">
           {englishTitle}
+        </p>
+      )}
+      {summary && (
+        <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+          {summary}
         </p>
       )}
     </li>
