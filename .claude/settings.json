@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "mcp__claude_ai_Notion__notion-create-pages",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -Command \"New-Item -ItemType Directory -Force 'C:\\Users\\infomax\\notion-cms-blog\\logs' | Out-Null; (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + ' [upload] Notion 페이지 업로드 완료' | Add-Content 'C:\\Users\\infomax\\notion-cms-blog\\logs\\uploads.log'\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -Command \"Write-Host ('=== Claude 세션 종료: ' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + ' ===')\""
+          }
+        ]
+      }
+    ]
+  }
+}
