@@ -34,8 +34,7 @@ function HeadlineBullet({ block }: { block: Block }) {
   const parts = plainSeg.text.split(" // ");
   const englishTitle = parts[1]?.trim() ?? "";
   const source = parts[2]?.trim() ?? "";
-
-  const summary = parts[3]?.trim() ?? "";
+  const summary = block.children?.[0]?.content?.trim() ?? "";
 
   return (
     <li className="list-none border-b border-border/30 py-3 last:border-0">

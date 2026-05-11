@@ -25,6 +25,7 @@ export type Block = {
   content: string;
   richText?: RichTextSegment[];
   url?: string;
+  children?: Block[];
 };
 
 const TOKEN = process.env.NOTION_API_KEY!;
@@ -134,30 +135,43 @@ function parseRichText(segments: any[]): { content: string; richText: RichTextSe
   return { content: richText.map((s) => s.text).join(""), richText };
 }
 
+function parseBlock(block: any): Block {
+  const { type } = block;
+  const richTextTypes = [
+    "paragraph", "heading_1", "heading_2", "heading_3",
+    "bulleted_list_item", "numbered_list_item", "quote",
+  ];
+
+  let content = "";
+  let richText: RichTextSegment[] | undefined;
+
+  if (richTextTypes.includes(type)) {
+    const parsed = parseRichText(block[type]?.rich_text ?? []);
+    content = parsed.content;
+    richText = parsed.richText;
+  }
+
+  const url =
+    type === "image"
+      ? (block.image?.file?.url ?? block.image?.external?.url)
+      : undefined;
+
+  return { id: block.id, type, content, richText, url };
+}
+
 export async function getPageBlocks(pageId: string): Promise<Block[]> {
   const data = await notionFetch(`blocks/${pageId}/children`, undefined, 300);
 
-  return data.results.map((block: any) => {
-    const { type } = block;
-    const richTextTypes = [
-      "paragraph", "heading_1", "heading_2", "heading_3",
-      "bulleted_list_item", "numbered_list_item", "quote",
-    ];
+  const blocks = data.results.map(parseBlock);
 
-    let content = "";
-    let richText: RichTextSegment[] | undefined;
+  await Promise.all(
+    data.results.map(async (raw: any, i: number) => {
+      if (raw.type === "bulleted_list_item" && raw.has_children) {
+        const childData = await notionFetch(`blocks/${raw.id}/children`, undefined, 300);
+        blocks[i].children = childData.results.map(parseBlock);
+      }
+    })
+  );
 
-    if (richTextTypes.includes(type)) {
-      const parsed = parseRichText(block[type]?.rich_text ?? []);
-      content = parsed.content;
-      richText = parsed.richText;
-    }
-
-    const url =
-      type === "image"
-        ? (block.image?.file?.url ?? block.image?.external?.url)
-        : undefined;
-
-    return { id: block.id, type, content, richText, url };
-  });
+  return blocks;
 }
