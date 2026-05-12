@@ -62,7 +62,9 @@
       "Bash(git check-ignore *)",
       "Bash(python *)",
       "Bash(Out-File -FilePath \"C:\\\\Users\\\\infomax\\\\notion-cms-blog\\\\logs\\\\article_extract.txt\" -Encoding utf8)",
-      "Agent"
+      "Agent",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(npm i *)"
     ]
   },
   "enableAllProjectMcpServers": true,
